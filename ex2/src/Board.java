@@ -4,8 +4,8 @@ public class Board {
     public static final int SIZE = 4;
     public static final int WIN_STREAK = 3;
     private Mark[][] board= new Mark[SIZE][SIZE];
-    boolean game_ended = false;
-    Mark winner = Mark.BLANK;
+    private boolean game_ended = false;
+    private Mark winner = Mark.BLANK;
     Board() {
         for(int i=0;i<SIZE;i++) {
             for (int j = 0; j < SIZE; j++) {
@@ -20,7 +20,7 @@ public class Board {
         }
         return board[i][j];
     }
-    public boolean putMark(Mark mark,int i, int j){
+    boolean putMark(Mark mark,int i, int j){
         if ((i<=SIZE && i>0) || (j<=SIZE && j>0))
         {
             if (board[i][j] ==Mark.BLANK){
@@ -69,7 +69,16 @@ public class Board {
             }
 
         }
-        return false;
+        for (int row=0;row<SIZE;row++) {
+            for (int col = 0; col < SIZE; col++) {
+                if (board[row][col] == Mark.BLANK){
+                    return false;
+                }
+
+            }
+        }
+
+        return true;
     }
 
     public Mark getWinner() {
