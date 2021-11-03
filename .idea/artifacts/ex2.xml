@@ -1,0 +1,12 @@
+<component name="ArtifactManager">
+  <artifact type="jar" name="ex2">
+    <output-path>$PROJECT_DIR$/out/artifacts/ex2</output-path>
+    <root id="archive" name="ex2.jar">
+      <element id="file-copy" path="$PROJECT_DIR$/ex2/src/Mark.java" />
+      <element id="file-copy" path="$PROJECT_DIR$/ex2/src/Player.java" />
+      <element id="file-copy" path="$PROJECT_DIR$/ex2/src/README" />
+      <element id="file-copy" path="$PROJECT_DIR$/ex2/src/Board.java" />
+      <element id="file-copy" path="$PROJECT_DIR$/ex2/src/Game.java" />
+    </root>
+  </artifact>
+</component>
