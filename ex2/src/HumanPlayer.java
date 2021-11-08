@@ -2,8 +2,7 @@ import java.util.Scanner;
 
 
 public class HumanPlayer implements Player{
-    HumanPlayer() {
-    }
+    HumanPlayer() {}
 
     /**
      * this method will continue until that we get from user to number
@@ -17,7 +16,8 @@ public class HumanPlayer implements Player{
     public void playTurn(Board board, Mark mark) {
         int choose;
         Scanner sc = new Scanner(System.in);
-        System.out.printf("Enter number between 1-%d", Board.SIZE);
+//        System.out.printf("Enter number between 1-%d", Board.SIZE);
+        System.out.print("Player " + mark + ", type coordinates: ");
 //        String sc = myObj.nextLine();
         for (; ; ) {
             if (!sc.hasNextInt()) {
@@ -36,7 +36,7 @@ public class HumanPlayer implements Player{
             if (board.putMark(mark, row, col)) {
                 break;
             }
-            System.out.print("The border is full at this place, try again:");
+            System.out.print("Invalid coordinates, type again: ");
         }
 
 
