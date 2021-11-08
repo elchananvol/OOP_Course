@@ -1,3 +1,25 @@
 volberstan
 206136749
 
+In this project i'm implementing tic-tac-toe game.
+
+in the command line user should type those four arguments:
+1. the number of round options: int > 0
+2. the way to print the board. options: console/none
+3. type of first player. options: human/clever/whatever/snartypamts
+4. type of second player. options: human/clever/whatever/snartypamts
+
+the way of non human players play:
+whatever - play absolutely randomly.
+clever - fill coordinate after coordinate by columns
+snartypamts - check if the opponent gonna to win then block it, otherwise fill coordinate after coordinate by rows
+
+
+if you choose human you will play the coordinate, you can choose to play against non human player.
+10000 between whatever player to himself we get:" player 1: 4981 | player 2: 4977 | Draws: 42" ~ same
+500 between whatever with clever player we get:  player 1: 65 | player 2: 435 | Draws: 0  ~ 87% for clever
+500 between clever with himself we get:  === player 1: 250 | player 2: 250 | Draws: 0 ===. ~ same
+500 between clever with snartypamts we get: === player 1: 52 | player 2: 448 | Draws: 0 === ===. 90% for the smarter
+500 between whatever with snartypamts we get: === player 1: 47 | player 2: 452 | Draws: 1 ===. 90% for smarterer
+500 between snartypamts with himself we get: === player 1: 146 | player 2: 138 | Draws: 216 ===. ~ same
+

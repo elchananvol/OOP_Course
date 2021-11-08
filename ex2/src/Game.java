@@ -1,9 +1,13 @@
 //import javax.swing.Renderer;
 
+/**
+ * this class will do round of game. so given two players and GUI (renderer),
+ * we have method (that can be used many times) to create a board and run one round of game.
+ */
 public class Game {
-    private Player playerX;
-    private Player playerO;
-    private Renderer renderer;
+    private final Player playerX;
+    private final Player playerO;
+    private final Renderer renderer;
 
     public Game(Player playerX, Player playerO, Renderer renderer) {
         this.playerX = playerX;
@@ -13,9 +17,8 @@ public class Game {
     }
 
     /**
-     * main method to run the game. it play the game until its end.
-     *
-     * @return the winner of the game.
+     * method to run game. its play one round all the game until end.
+     * @return the mark winner of the game.
      */
     public Mark run() {
         Board board = new Board();
@@ -28,7 +31,6 @@ public class Game {
             i = 1 - i;
         }
         return board.getWinner();
-
     }
 
 
