@@ -1,7 +1,10 @@
 import java.util.Scanner;
-
-
+/**
+the class imply functionality for human player by giving a method that handle
+ with input and parse it to coordinate on board
+*/
 public class HumanPlayer implements Player{
+    final String WRONG_COORDINATE_MSG = "Invalid coordinates, type again: ";
     HumanPlayer() {}
 
     /**
@@ -16,27 +19,26 @@ public class HumanPlayer implements Player{
     public void playTurn(Board board, Mark mark) {
         int choose;
         Scanner sc = new Scanner(System.in);
-//        System.out.printf("Enter number between 1-%d", Board.SIZE);
         System.out.print("Player " + mark + ", type coordinates: ");
-//        String sc = myObj.nextLine();
+
         for (; ; ) {
             if (!sc.hasNextInt()) {
-                System.out.println("only integers!: ");
-                sc.next(); // discard
+                System.out.println(WRONG_COORDINATE_MSG);
+                sc.next();
                 continue;
             }
             choose = sc.nextInt();
             int row = choose / 10 - 1;
             int col = choose % 10 - 1;
             if (choose <= 0 || row > Board.SIZE || col > Board.SIZE) {
-                System.out.printf("no, only 1-%d: ", Board.SIZE);
+                System.out.print(WRONG_COORDINATE_MSG);
                 continue;
             }
 
             if (board.putMark(mark, row, col)) {
                 break;
             }
-            System.out.print("Invalid coordinates, type again: ");
+            System.out.print(WRONG_COORDINATE_MSG);
         }
 
 

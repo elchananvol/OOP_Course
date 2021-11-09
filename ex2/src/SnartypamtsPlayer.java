@@ -56,7 +56,6 @@ public class SnartypamtsPlayer implements Player {
         }
         return board.putMark(mark, row2, col2);
     }
-
     /**
      * this method will implement strategy that if the opponent have almost enough streak
      * to win the smart player will block him.
@@ -67,6 +66,7 @@ public class SnartypamtsPlayer implements Player {
      * @param mark mark
      * @return true if in the search its fill the board with the mark
      */
+
     public boolean findAlmostWin(Board board,Mark mark){
         Mark opposite = Mark.X;
         if (mark == opposite) {
