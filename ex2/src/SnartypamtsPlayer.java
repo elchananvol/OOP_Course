@@ -31,16 +31,17 @@ public class SnartypamtsPlayer implements Player {
         }
         while (true) {
             if (board.putMark(mark, row, col)) {
-                row++;
+                col++;
                 break;
             }
-            row++;
-            if (row > Board.SIZE) {
-                row=0;
-                col ++;
-            }
+            col++;
             if (col > Board.SIZE) {
+                row++;
                 col = 0;
+            }
+            if (row > Board.SIZE) {
+                row = 0;
+
             }
         }
     }
