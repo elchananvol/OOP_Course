@@ -49,7 +49,7 @@ public class Tournament {
             }
         }
         assert counters[2] == rounds - counters[1] - counters[0];
-        System.out.printf("=== player 1: %d | player 2: %d | Draws: %d === ===", counters[0], counters[1], counters[2]);
+        System.out.printf("=== player 1: %d | player 2: %d | Draws: %d ===", counters[0], counters[1], counters[2]);
     }
 
 
