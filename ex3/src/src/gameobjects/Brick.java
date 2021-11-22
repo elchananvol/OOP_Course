@@ -1,6 +1,6 @@
-package gameobjects;
+package src.gameobjects;
 
-import brick_strategies.CollisionStrategy;
+import src.brick_strategies.CollisionStrategy;
 import danogl.GameObject;
 import danogl.collisions.Collision;
 import danogl.util.Counter;
@@ -31,7 +31,8 @@ public class Brick extends GameObject {
     }
 
     /**
-     * Overrides onCollisionEnter in class danogl.GameObject
+     * Overrides onCollisionEnter in class danogl.GameObject.
+     * call to collisionStrategy class to handle.
      */
     @Override
     public void onCollisionEnter(GameObject other, Collision collision) {

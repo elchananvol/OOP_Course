@@ -1,0 +1,21 @@
+<component name="ArtifactManager">
+  <artifact type="jar" name="Ex3_1">
+    <output-path>$PROJECT_DIR$/out/artifacts/Ex3_1</output-path>
+    <root id="archive" name="Ex3_1.jar">
+      <element id="file-copy" path="$PROJECT_DIR$/ex3/src/README" />
+      <element id="directory" name="src">
+        <element id="directory" name="brick_strategies">
+          <element id="file-copy" path="$PROJECT_DIR$/ex3/src/src/brick_strategies/CollisionStrategy.java" />
+        </element>
+        <element id="directory" name="gameobjects">
+          <element id="file-copy" path="$PROJECT_DIR$/ex3/src/src/gameobjects/Ball.java" />
+          <element id="file-copy" path="$PROJECT_DIR$/ex3/src/src/gameobjects/Brick.java" />
+          <element id="file-copy" path="$PROJECT_DIR$/ex3/src/src/gameobjects/GraphicLifeCounter.java" />
+          <element id="file-copy" path="$PROJECT_DIR$/ex3/src/src/gameobjects/NumericLifeCounter.java" />
+          <element id="file-copy" path="$PROJECT_DIR$/ex3/src/src/gameobjects/Paddle.java" />
+        </element>
+        <element id="file-copy" path="$PROJECT_DIR$/ex3/src/src/BrickerGameManager.java" />
+      </element>
+    </root>
+  </artifact>
+</component>

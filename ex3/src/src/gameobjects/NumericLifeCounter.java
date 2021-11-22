@@ -1,12 +1,10 @@
 package src.gameobjects;
 
-import danogl.GameObject;
-import danogl.collisions.GameObjectCollection;
+
 import danogl.collisions.Layer;
 import danogl.gui.rendering.TextRenderable;
 import danogl.util.Counter;
-import danogl.util.Vector2;
-import java.awt.*;
+
 
 /**
  * handles the numeric lives of the game.
@@ -39,6 +37,8 @@ public class NumericLifeCounter extends danogl.GameObject {
 
     /**
      * Overrides update in class danogl.GameObject
+     * every time that numOfLivesChanged parameter bigger than global counter is mean that global counter
+     * decrease because the gamer lose life. so in update we will change the slide to current num of lives.
      */
     @Override
     public void update(float deltaTime) {

@@ -19,11 +19,12 @@ public class Paddle extends GameObject {
      * Construct a new GameObject instance.
      *
      * @param topLeftCorner Position of the object, in window coordinates (pixels).
-     *                      Note that (0,0) is the top-left corner of the window.
-     * @param dimensions    Width and height in window coordinates.
+     * @param dimensions    Width and height in window coordinates of widget.
      * @param renderable    The renderable representing the object. Can be null, in which case
-     * @param inputListener
-     * @param screenWidth
+     * @param inputListener the object that responsible on get input from user
+     * @param windowDimensions the dimensions of window. need for determine when paddle out from window.
+     * @param minDistanceFromEdge the border size or slide bar. as window dimensions it's needed to determine
+     *                           when paddle out from window.
      */
     public Paddle(danogl.util.Vector2 topLeftCorner,
                    danogl.util.Vector2 dimensions,
@@ -40,6 +41,7 @@ public class Paddle extends GameObject {
 
     /**
      * Overrides update in class danogl.GameObject
+     * muve the paddle right or left. if the paddle exceed from the border then do nothing
      */
     @Override
     public void update(float deltaTime) {
@@ -55,11 +57,14 @@ public class Paddle extends GameObject {
 
         }
         setVelocity(movement.mult(MOVEMENTS_SPEED));
-        if(getTopLeftCorner().x() < MIN_DISTANCE_FROM_SCREEN_EDGE)
-        {
-            setTopLeftCorner(new Vector2(MIN_DISTANCE_FROM_SCREEN_EDGE,getTopLeftCorner().y()));
-        }
+
         float leftEgde =windowDimensions.x() - MIN_DISTANCE_FROM_SCREEN_EDGE - getDimensions().x();
+        float rightEgde = MIN_DISTANCE_FROM_SCREEN_EDGE;
+        if(getTopLeftCorner().x() < rightEgde)
+        {
+            setTopLeftCorner(new Vector2(rightEgde,getTopLeftCorner().y()));
+        }
+
         if(getTopLeftCorner().x() > leftEgde)
         {
             setTopLeftCorner(new Vector2(leftEgde,getTopLeftCorner().y()));

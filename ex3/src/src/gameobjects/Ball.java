@@ -1,4 +1,4 @@
-package gameobjects;
+package src.gameobjects;
 
 import danogl.collisions.Collision;
 import danogl.gui.rendering.Renderable;
@@ -24,7 +24,8 @@ public class Ball extends GameObject{
         this.sound = sound;
     }
     /**
-     * On collision, object velocity is reflected about the normal vector of the surface it collides with.
+     * On collision, object velocity is reflected about the normal vector of the surface it collides with
+     * and make sound.
      * @param other other GameObject instance participating in collision.
      * @param collision Collision object.
      */
