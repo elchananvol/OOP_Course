@@ -72,4 +72,6 @@ public class GraphicLifeCounter extends danogl.GameObject {
             numOfLives--;
         }
     }
+
+
 }

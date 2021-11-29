@@ -1,2 +1,39 @@
 volberstan
 206136749
+
+
+implamention:
+i follow the API and add 4 classes:
+
+DoubleStrategy - that create double strategy that demand.
+                it get list of strategy that exist and choose from them randomly.
+ChangePaddleLengthStrategy - create randomly narrow or wide arrow image that make to paddle change size.
+
+StatusDefines -  in gameobjects package that make image appear from brick and go down direction until and
+                    of window or collided with paddle.
+BuffChangeSizeOfPaddle - in gameobjects package. object that make paddle to change size. inheritor of StatusDefines.
+
+note: the camera change only if the main ball collided with brick with that strategy.
+moreover, it counting 4 collision of ball with every object including the borders.
+the ball and puck can collide each other, and flipped direction when it happen.
+if the frame is slow the game update can miss that ball collided with borders and lose the ball.
+the puck is go down when it created and have size of a third from brick.
+
+
+algo question:
+alotStudyTime - i assume that every timeSlot can contain one task. so when we have ordered arrays we can see
+                which of tasks "have place" inside of timeslot.
+                i did it in O(n*log(n)). sort for arrays and than moving along sorted arrays. -Greedy algorithm.
+minLeap - i started from right side of array. in every step i chose the maximal gap that i can do in my next step.
+           so let say we have arr = {2,3,1,4,5,6} in me first step i go to arr[1] or arr[2], so i check which of them
+            bring me in third step to the far away (that is arr[2]) and i continue going with it on so on.
+             i did it in O(n).  i go over array once. -Greedy algorithm.
+
+bucketWalk - that last step it can be with 2 liters or 1. so if the last liter was one we have all ways until
+             bucketWalk(n-1) and if it was 2 liters we have all way until bucketWalk(n-2) by induction.
+             is Fibonacci series, and can solve by dynamic algorithm as well as direct multiplication in golden ratio.
+             i did it with O(n) dynamically.
+numTrees - the answer is Catlan numbers series - i don't have an proof for it just remember from privies courses.
+           it could be found by direct C(n)= 2nCn *1/n+1 which is make java lose because large numbers (but o(n)).
+           and could be found as sigma of earlier conclusion. and so i did it. O(n*log(n) dynamically.
+

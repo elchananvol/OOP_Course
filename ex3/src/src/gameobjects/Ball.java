@@ -10,14 +10,15 @@ import danogl.GameObject;
  * holds a Ball object of the game.
  */
 public class Ball extends GameObject{
-    private Sound sound;
+    private final Sound sound;
+    private int counter =0;
     /**
      * Construct a new GameObject instance.
      *
      * @param topLeftCorner Position of the object, in window coordinates (pixels).
-     *                      Note that (0,0) is the top-left corner of the window.
      * @param dimensions    Width and height in window coordinates.
      * @param renderable    The renderable representing the object. Can be null, in which case
+     * @param sound the sound to make when ball collides
      */
     public Ball(Vector2 topLeftCorner, Vector2 dimensions, Renderable renderable,Sound sound) {
         super(topLeftCorner, dimensions, renderable);
@@ -34,5 +35,14 @@ public class Ball extends GameObject{
         super.onCollisionEnter(other, collision);
         this.setVelocity(this.getVelocity().flipped(collision.getNormal()));
         sound.play();
+        counter++;
+    }
+
+    /**
+     * getter method.
+     * @return num of collision from start game
+     */
+    public int getCollisionCount(){
+        return this.counter;
     }
 }

@@ -1,6 +1,6 @@
 package src;
 
-import src.brick_strategies.CollisionStrategy;
+import src.brick_strategies.BrickStrategyFactory;
 import danogl.GameManager;
 import danogl.GameObject;
 import danogl.collisions.Layer;
@@ -9,12 +9,8 @@ import danogl.gui.rendering.ImageRenderable;
 import danogl.gui.rendering.RectangleRenderable;
 import danogl.util.Counter;
 import danogl.util.Vector2;
-import src.gameobjects.Ball;
-import src.gameobjects.Brick;
-import src.gameobjects.Paddle;
+import src.gameobjects.*;
 import danogl.gui.UserInputListener;
-import src.gameobjects.GraphicLifeCounter;
-import src.gameobjects.NumericLifeCounter;
 
 import java.awt.*;
 import java.util.Random;
@@ -25,7 +21,7 @@ import java.util.Random;
 public class BrickerGameManager extends GameManager {
     public static int BORDER_WIDTH = 20;
     private static final Color BORDER_COLOR = Color.CYAN;
-    private static final int BALL_SPEED = 300;
+    private static final int BALL_SPEED = 200;
     private static final int BRICK_ROWS = 5;
     private static final int BRICK_COLS = 8;
     private static final int BRICK_HEIGHT = 15;
@@ -39,7 +35,7 @@ public class BrickerGameManager extends GameManager {
     private WindowController windowController;
     private Vector2 windowDimension;
     private final Counter bricksCounter = new danogl.util.Counter();
-    private final danogl.util.Counter livesCounter = new danogl.util.Counter();
+    private final danogl.util.Counter livesCounter = new danogl.util.Counter(0);
 
     /**
      * default constructor.
@@ -68,19 +64,26 @@ public class BrickerGameManager extends GameManager {
         super.initializeGame(imageReader, soundReader, inputListener, windowController);
         this.windowController = windowController;
         this.windowDimension = windowController.getWindowDimensions();
+        //windowController.setTargetFramerate(40);
         createBall(imageReader, soundReader);
         createPaddle(imageReader, inputListener);
         createBorders();
-        createBricks(imageReader);
+        BrickStrategyFactory p = new BrickStrategyFactory(gameObjects(), this, imageReader, soundReader,
+                inputListener, windowController, windowDimension);
+        createBricks(imageReader, p);
         createLivesCounter(imageReader);
+
+
     }
 
     /**
      * create Lives graphic symbol as NUM_OF_LIVES times at left down corner of window.
      * above the graphic create number symbol.
+     *
      * @param imageReader an ImageReader instance for reading images from files for rendering of objects.
      */
     private void createLivesCounter(ImageReader imageReader) {
+        livesCounter.reset();
         livesCounter.increaseBy(NUM_OF_LIVES);
         Vector2 size_of_widget = new Vector2(LIVES_FONT_SIZE, LIVES_FONT_SIZE);
         ImageRenderable liveImage = imageReader.readImage("src/assets/heart.png", true);
@@ -94,7 +97,8 @@ public class BrickerGameManager extends GameManager {
 
     /**
      * create paddle in midlle of window down above border. in size dimension (x,y) = (100,15)
-     * @param imageReader an ImageReader instance for reading images from files for rendering of objects.
+     *
+     * @param imageReader   an ImageReader instance for reading images from files for rendering of objects.
      * @param inputListener an InputListener instance for reading user input.
      */
 
@@ -126,6 +130,7 @@ public class BrickerGameManager extends GameManager {
      */
     private void setBallAtCenter() {
 
+
         Random random = new Random();
         int x_direction = BALL_SPEED;
         int y_direction = BALL_SPEED;
@@ -148,7 +153,6 @@ public class BrickerGameManager extends GameManager {
     public void update(float deltaTime) {
         super.update(deltaTime);
         checkEndGame();
-
     }
 
     /**
@@ -165,7 +169,7 @@ public class BrickerGameManager extends GameManager {
                 prompt += "you lose";
             }
         }
-        if (bricksCounter.value() == 0) {
+        if (bricksCounter.value() <= 0) {
             prompt += "you win";
         }
 
@@ -187,20 +191,24 @@ public class BrickerGameManager extends GameManager {
 
         GameObject rightBorder = new GameObject(Vector2.ZERO.add(new Vector2(SIDE_BAR, 0)), sideWall, color);
         GameObject upBorder = new GameObject(Vector2.ZERO.add(new Vector2(SIDE_BAR, 0)), upDownWall, color);
-        GameObject downBorder = new GameObject(new Vector2(0, windowDimension.y() - BORDER_WIDTH), upDownWall, color);
-        GameObject leftBorder = new GameObject(new Vector2(windowDimension.x() - BORDER_WIDTH, 0), sideWall, color);
-        this.gameObjects().addGameObject(upBorder);
-        this.gameObjects().addGameObject(rightBorder);
-        this.gameObjects().addGameObject(downBorder);
-        this.gameObjects().addGameObject(leftBorder);
+        GameObject downBorder = new GameObject(new Vector2(0, windowDimension.y() - BORDER_WIDTH),
+                upDownWall, color);
+        GameObject leftBorder = new GameObject(new Vector2(windowDimension.x() - BORDER_WIDTH, 0),
+                sideWall, color);
+        this.gameObjects().addGameObject(upBorder, Layer.STATIC_OBJECTS);
+        this.gameObjects().addGameObject(rightBorder, Layer.STATIC_OBJECTS);
+        this.gameObjects().addGameObject(downBorder, Layer.BACKGROUND);
+        this.gameObjects().addGameObject(leftBorder, Layer.STATIC_OBJECTS);
 
     }
 
     /**
      * create bricks insides the borders.
+     *
      * @param imageReader an ImageReader instance for reading images from files for rendering of objects.
      */
-    private void createBricks(ImageReader imageReader) {
+    private void createBricks(ImageReader imageReader, BrickStrategyFactory factory) {
+
         bricksCounter.reset();
         ImageRenderable brickImage = imageReader.readImage("src/assets/brick.png", true);
         float brick_width = (windowDimension.x() - SIDE_BAR - BORDER_WIDTH * 2 - SPACE_BETWEEN_BRICKS *
@@ -209,10 +217,10 @@ public class BrickerGameManager extends GameManager {
 
         for (int row = 0; row < BRICK_ROWS; row++) {
             for (int col = 0; col < BRICK_COLS; col++) {
-                Vector2 location = new Vector2(BORDER_WIDTH + SIDE_BAR +  (brick_width
+                Vector2 location = new Vector2(BORDER_WIDTH + SIDE_BAR + (brick_width
                         + SPACE_BETWEEN_BRICKS) * col, BORDER_WIDTH + row * BRICK_HEIGHT);
-                GameObject brick = new Brick(location, brickDimension, brickImage,
-                                    new CollisionStrategy(this.gameObjects()), bricksCounter);
+                GameObject brick = new Brick(location, brickDimension, brickImage, factory.getStrategy(),
+                        bricksCounter);
                 bricksCounter.increment();
                 this.gameObjects().addGameObject(brick, Layer.STATIC_OBJECTS);
             }

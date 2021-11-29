@@ -1,11 +1,14 @@
 package algo_questions;
 
+import java.lang.reflect.Array;
+import java.util.Arrays;
+
 public class Solutions {
     public Solutions() {
     }
 
     /**
-     * Method computing the maximal amount of tasks out of n tasks that can be completed with m time slots.
+     *  alotStudyTime Method of class Solutions computing the maximal amount of tasks out of n tasks that can be completed with m time slots.
      * A task can only be completed in a time slot if the length of the time slot is grater than the no.
      * of hours needed to complete the task.
      * Parameters:
@@ -14,9 +17,19 @@ public class Solutions {
      * Returns:
      * maximal amount of tasks that can be completed
      */
-//    public static int alotStudyTime​(int[] tasks, int[] timeSlots){
+    public static int alotStudyTime(int[] tasks, int[] timeSlots){
+        Arrays.sort(tasks);
+        Arrays.sort(timeSlots);
+        int i =0;
+        int j =0;
+        for(;i<timeSlots.length;i++){
+            if (j != tasks.length && tasks[j] <= timeSlots[i]){
+                j++;
+            }
+        }
+        return j;
 
-//    }
+    }
 
     /**
      * Method computing the nim amount of leaps a frog needs to jumb across n waterlily leaves, from leaf 1 to leaf n.
@@ -29,29 +42,21 @@ public class Solutions {
      * minimal no. of leaps to last leaf.
      */
     public static int minLeap(int[] leapNum) {
-        int len = leapNum.length;
-        int[] jumps = new int[len];
-        jumps[len - 1] = 0;
-        for (int i = len - 2; i >= 0; i--) {
-            if (leapNum[i] == 0) {
-                jumps[i] = 0;
-                continue;
-            }
-            int min = len + 1;
-            for (int j = 1; j <= leapNum[i]; j++) {
-                if (i + j == len - 1) {
-                    jumps[i] = 1;
-                    break;
+            if(leapNum.length == 1) return 0;
+            int left = 0;
+            int right = 0;
+            int move;
+            int count = 0;
+            while(right < leapNum.length-1){
+                move=0;
+                for(int i=left; i <= right; i++){
+                    move =Math.max(leapNum[i]+i,move);
                 }
-                if (i + j < len) {
-                    if (jumps[i + j] < min && jumps[i + j] != 0) {
-                        jumps[i] = jumps[i + j] + 1;
-                        min = jumps[i + j];
-                    }
-                }
+                left = right+1;
+                right = move;
+                count++;
             }
-        }
-        return jumps[0];
+            return count;
 
     }
 
@@ -67,11 +72,11 @@ public class Solutions {
      * @return valid output of algorithm.
      */
     public static int bucketWalk(int n) {
-        int[] buckets = new int[n + 1];
+        int[] buckets = new int[n + 2];
         buckets[0] = 1;
         buckets[1] = 1;
         for (int i = 2; i <= n; i++) {
-            buckets[i] = buckets[i - 1] + buckets[i - 2];
+            buckets[i] = buckets[i - 1] + buckets[i - 2] ;
         }
         return buckets[n];
     }
@@ -86,41 +91,26 @@ public class Solutions {
      * @return valid output of algorithm.
      */
     public static int numTrees(int n) {
-        // Checking for Invalid Input
-        if (n < 0) {
-            throw new IllegalArgumentException("Invalid Input");
-        }
-        // For n == 0, empty tree is a valid BST.
-        // For n == 1, valid BST can have only one node.
         if (n <= 1) {
             return 1;
         }
 
-        int[] dp = new int[n + 1];
-        dp[0] = 1;
-        dp[1] = 1;
+        int[] data = new int[n + 1];
+        data[0] = 1;
+        data[1] = 1;
 
         for (int i = 2; i <= n; i++) {
-            // We only need to do half as dp[i] is symmetrical.
-            // For example, when i = 5:
-            // dp[i] = dp[0]*dp[4] + dp[1]*dp[3] + dp[2]*dp[2] + dp[3]*dp[1] + dp[4]*dp[0]
-            // Here except dp[2]*dp[2] all others are appearing twice.
-            for (int j = 0; j < i / 2; j++) {
-                dp[i] += dp[j] * dp[i - 1 - j];
-            }
-            dp[i] *= 2;
 
-            // Only add i/2 * i/2 for odd numbers.
-            if ((i & 1) == 1) {
-                dp[i] += dp[i / 2] * dp[i / 2];
+            for (int j = 0; j < i / 2; j++) {
+                data[i] += data[j] * data[i - 1 - j];
+            }
+            data[i] *= 2;
+            if ((i & 1 ) != 0) {
+                data[i] += data[i / 2] * data[i / 2];
             }
         }
 
-        return dp[n];
+        return data[n];
     }
-//    public static long factorial(int n){
-//        if (n<=2) {return n;}
-//        return factorial(n-1)*n;
-//    }
 
 }
