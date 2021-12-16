@@ -42,7 +42,10 @@ public class CharRenderer {
         return matrix;
     }
 
-    //for debugging
+    /**
+     * print nested boolean array with * every point that is true.
+     * @param arr array to print to console
+     */
     public static void printBoolArr(boolean[][] arr) {
         //add your code here
         for(int i=0;i< arr.length;i++){
