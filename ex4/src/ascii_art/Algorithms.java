@@ -30,12 +30,12 @@ public class Algorithms {
     public static int uniqueMorseRepresentations(String[] words) {
         Set<String> morse = new HashSet<>();
         for (String word : words) {
-                String s = "";
-                for (int i = 0; i < word.length(); i++) {
-                    s = s.concat(MORSE[(int) word.charAt(i) - 97]);
+            String s = "";
+            for (int i = 0; i < word.length(); i++) {
+                s = s.concat(MORSE[(int) word.charAt(i) - 97]);
 
-                }
-                morse.add(s);
+            }
+            morse.add(s);
 
         }
         return morse.size();

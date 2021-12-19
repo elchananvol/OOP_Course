@@ -10,7 +10,6 @@ import java.util.HashSet;
 import java.util.Scanner;
 import java.util.Set;
 import java.util.function.Consumer;
-import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 
@@ -212,7 +211,7 @@ public class Shell {
                 }
                 break;
             case CMD_CHANGE_RESOLUTION_DOWN:
-                    charsInRow /=FIXED_MULTIPLICATION;
+                charsInRow /= FIXED_MULTIPLICATION;
                 if (charsInRow <= minCharsInRow) {
                     charsInRow = minCharsInRow;
                     System.out.println(MIN_RESOLUTION_MSG + charsInRow);

@@ -72,7 +72,7 @@ public class BrightnessImgCharMatcher {
                         }
                     }
                 }
-                brightnessLevelOfLettersCache.put(character,((double) counter / (double) (cs.length * cs[0].length)));
+                brightnessLevelOfLettersCache.put(character, ((double) counter / (double) (cs.length * cs[0].length)));
                 brightnessLevelOfCurrentCharSet.put(character, brightnessLevelOfLettersCache.get(character));
             }
         }
@@ -111,7 +111,6 @@ public class BrightnessImgCharMatcher {
 
     /**
      * this function get over an image, and calculate the mean of *gray* image.
-     *
      * @param img img
      * @return double, the mean pixel.
      */
@@ -120,13 +119,12 @@ public class BrightnessImgCharMatcher {
         for (Color pixel : img.pixels()) {
             sumOfPixelsValues += rgbToGray(pixel);
         }
-        return sumOfPixelsValues / (img.getWidth()* img.getHeight() * GREY_RANGE);
+        return sumOfPixelsValues / (img.getWidth() * img.getHeight() * GREY_RANGE);
 
     }
 
     /**
      * convert RGB pixel to its grey value
-     *
      * @param color color object
      * @return double value of the grey according RGB to YIQ matrix
      */
