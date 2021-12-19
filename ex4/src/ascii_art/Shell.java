@@ -49,18 +49,18 @@ public class Shell {
     private static final Character SPACE = ' ';
     private static final String FONT_NAME = "Courier New";
     private static final String OUTPUT_FILENAME = "out.html";
-    private static final String HELP_MASSAGE = """
-            this program convert an image to character image that every sub image will replace in character that
-                have closest brightness to the sub image. (default is converting to numbers characters) the command that
-                can be using in run time is:
-            add {char}  - for adding character to the subset, more possible option is  add all for all characters
-                that possible, add space, and add a-c for range (low case)
-            remove - have same option as add. see above.
-            chars - for show all chars that are in list.
-            res up/down - to double or split image resolution (default set to image_width/64).
-            console - to show output at console when you finish process in command "render".
-            render  - to render image. default save to file out.html, see also console command for details.
-            exit - to exit this process""";
+    private static final String HELP_MASSAGE = "" +
+            "this program convert an image to character image that every sub image will replace in character that" +
+            "\n\thave closest brightness to the sub image. (default is converting to numbers characters) the command" +
+            " \n\tthat can be using in run time is:\n" +
+            "add {char}  - for adding character to the subset, more possible option is  add all for all characters" +
+            "\n\tthat possible, add space, and add a-c for range (low case)\n" +
+            "remove - have same option as add. see above.\n" +
+            "chars - for show all chars that are in list.\n" +
+            "res up/down - to double or split image resolution (default set to image_width/64).\n" +
+            "console - to show output at console when you finish process in command 'render'.\n" +
+            "render  - to render image. default save to file out.html, see also console command for details.\n" +
+            "exit - to exit this process";
 
     private final BrightnessImgCharMatcher charMatcher;
     private AsciiOutput output = new HtmlAsciiOutput(OUTPUT_FILENAME, FONT_NAME);
@@ -86,7 +86,7 @@ public class Shell {
         maxCharsInRow = img.getWidth() / MIN_PIXELS_PER_CHAR;
         charsInRow = Math.max(Math.min(INITIAL_CHARS_IN_ROW, maxCharsInRow), minCharsInRow);
         charMatcher = new BrightnessImgCharMatcher(img, FONT_NAME);
-        add_remove(INIT_CHARSET,charSet::add);
+        add_remove(INIT_CHARSET, charSet::add);
 
     }
 
@@ -201,7 +201,7 @@ public class Shell {
      */
     private void resChange(String up_or_down) {
         switch (up_or_down) {
-            case CMD_CHANGE_RESOLUTION_UP -> {
+            case CMD_CHANGE_RESOLUTION_UP:
                 charsInRow *= FIXED_MULTIPLICATION;
                 if (charsInRow >= maxCharsInRow) {
                     charsInRow = maxCharsInRow;
@@ -210,18 +210,19 @@ public class Shell {
                 } else {
                     System.out.println(CHANGE_WIDTH_MSG + charsInRow);
                 }
-            }
-            case CMD_CHANGE_RESOLUTION_DOWN -> {
-                charsInRow /= FIXED_MULTIPLICATION;
+                break;
+            case CMD_CHANGE_RESOLUTION_DOWN:
+                    charsInRow /=FIXED_MULTIPLICATION;
                 if (charsInRow <= minCharsInRow) {
                     charsInRow = minCharsInRow;
                     System.out.println(MIN_RESOLUTION_MSG + charsInRow);
                 } else {
                     System.out.println(CHANGE_WIDTH_MSG + charsInRow);
                 }
-            }
-            default -> System.out.println(THIS_COMMEND_GET_SECOND_PARAMETER + CMD_CHANGE_RESOLUTION_UP +
-                    "/" + CMD_CHANGE_RESOLUTION_DOWN);
+                break;
+            default:
+                System.out.println(THIS_COMMEND_GET_SECOND_PARAMETER + CMD_CHANGE_RESOLUTION_UP +
+                        "/" + CMD_CHANGE_RESOLUTION_DOWN);
         }
     }
 }
