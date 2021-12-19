@@ -7,6 +7,8 @@ import java.util.Arrays;
 import java.util.HashMap;
 
 public class BrightnessImgCharMatcher {
+    private static final int NUM_OF_PIXELS_AT_CHARACTER = 16;
+    private static final int GREY_RANGE = 255;
     private final String font;
     private final Image image;
     private final HashMap<Image, Double> cache = new HashMap<>();
@@ -56,20 +58,12 @@ public class BrightnessImgCharMatcher {
      * @param charSet array of chars to calculate
      */
     private void brightnessLevel(Character[] charSet) {
-//        List<Character> array_char = Arrays.asList(charSet);
-//        for (Character c : brightnessLevel_cache.keySet()) {
-//            if (!array_char.contains(c)) {
-//                non_using_brightnessLevel_cache.put(c, brightnessLevel_cache.get(c));
-//                brightnessLevel_cache.remove(c);
-//
-//            }
-//        }
         brightnessLevelOfCurrentCharSet.clear();
         for (Character character : charSet) {
             if (brightnessLevelOfLettersCache.containsKey(character)) {
                 brightnessLevelOfCurrentCharSet.put(character, brightnessLevelOfLettersCache.get(character));
             } else {
-                boolean[][] cs = CharRenderer.getImg(character, 16, this.font);
+                boolean[][] cs = CharRenderer.getImg(character, NUM_OF_PIXELS_AT_CHARACTER, this.font);
                 int counter = 0;
                 for (boolean[] c : cs) {
                     for (boolean b : c) {
@@ -99,7 +93,6 @@ public class BrightnessImgCharMatcher {
         double max = brightnessLevelOfCurrentCharSet.values().stream().iterator().next();
         double min = max;
         double[] new_brightness = new double[brightnessLevelOfCurrentCharSet.size()];
-
         for (Character ktr : brightnessLevelOfCurrentCharSet.keySet()) {
             if (brightnessLevelOfCurrentCharSet.get(ktr) > max) {
                 max = brightnessLevelOfCurrentCharSet.get(ktr);
@@ -107,7 +100,6 @@ public class BrightnessImgCharMatcher {
             if (brightnessLevelOfCurrentCharSet.get(ktr) < min) {
                 min = brightnessLevelOfCurrentCharSet.get(ktr);
             }
-
         }
         assert min != max;
         double maxMinusMin = max - min;
@@ -124,14 +116,11 @@ public class BrightnessImgCharMatcher {
      * @return double, the mean pixel.
      */
     private static double meanPixel(Image img) {
-        int counterOfPixels = 0;
         double sumOfPixelsValues = 0;
         for (Color pixel : img.pixels()) {
             sumOfPixelsValues += rgbToGray(pixel);
-            counterOfPixels++;
-
         }
-        return sumOfPixelsValues / (counterOfPixels * 255);
+        return sumOfPixelsValues / (img.getWidth()* img.getHeight() * GREY_RANGE);
 
     }
 
@@ -139,7 +128,7 @@ public class BrightnessImgCharMatcher {
      * convert RGB pixel to its grey value
      *
      * @param color color object
-     * @return double value of the grey
+     * @return double value of the grey according RGB to YIQ matrix
      */
     private static double rgbToGray(Color color) {
         return color.getRed() * 0.2126 + color.getGreen() * 0.7152 +
@@ -180,7 +169,6 @@ public class BrightnessImgCharMatcher {
             asciiArt[counter / columns][counter % columns] = charSet[idx];
         }
         return asciiArt;
-
     }
 
 }
