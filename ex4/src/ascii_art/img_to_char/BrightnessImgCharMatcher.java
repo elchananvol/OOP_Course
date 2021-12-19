@@ -5,13 +5,14 @@ import image.Image;
 import java.awt.*;
 import java.util.Arrays;
 import java.util.HashMap;
-import java.util.List;
 
 public class BrightnessImgCharMatcher {
     private final String font;
     private final Image image;
     private final HashMap<Image, Double> cache = new HashMap<>();
-    private final HashMap<Character, Double> brightnessLevel_cache = new HashMap<>();
+    private final HashMap<Character, Double> brightnessLevelOfCurrentCharSet = new HashMap<>();
+    private final HashMap<Character, Double> brightnessLevelOfLettersCache = new HashMap<>();
+
 
     /**
      * constactor. get image and font to replace in the image
@@ -29,7 +30,7 @@ public class BrightnessImgCharMatcher {
      * the nearest char that have the closest brightness
      *
      * @param numCharsInRow int for num chars that replace row at image
-     * @param charSet list of chars
+     * @param charSet       list of chars
      * @return if charSet empty, return empty image, else return an image that every sub pixel replaced.
      */
     public char[][] chooseChars(int numCharsInRow, Character[] charSet) {
@@ -44,13 +45,8 @@ public class BrightnessImgCharMatcher {
                 return asciiArt;
             }
         }
-
-        for (Character c : charSet) {
-            if (!brightnessLevel_cache.containsKey(c)) {
-                brightnessLevel(charSet);
-            }
-        }
-        return convertImageToAscii(numCharsInRow,charSet);
+        brightnessLevel(charSet);
+        return convertImageToAscii(numCharsInRow, charSet);
     }
 
     /**
@@ -60,15 +56,19 @@ public class BrightnessImgCharMatcher {
      * @param charSet array of chars to calculate
      */
     private void brightnessLevel(Character[] charSet) {
-        List<Character> array_char = Arrays.asList(charSet);
-        for (Character c : brightnessLevel_cache.keySet()) {
-            if (!array_char.contains(c)) {
-                brightnessLevel_cache.remove(c);
-            }
-        }
-
+//        List<Character> array_char = Arrays.asList(charSet);
+//        for (Character c : brightnessLevel_cache.keySet()) {
+//            if (!array_char.contains(c)) {
+//                non_using_brightnessLevel_cache.put(c, brightnessLevel_cache.get(c));
+//                brightnessLevel_cache.remove(c);
+//
+//            }
+//        }
+        brightnessLevelOfCurrentCharSet.clear();
         for (Character character : charSet) {
-            if (!brightnessLevel_cache.containsKey(character)) {
+            if (brightnessLevelOfLettersCache.containsKey(character)) {
+                brightnessLevelOfCurrentCharSet.put(character, brightnessLevelOfLettersCache.get(character));
+            } else {
                 boolean[][] cs = CharRenderer.getImg(character, 16, this.font);
                 int counter = 0;
                 for (boolean[] c : cs) {
@@ -78,11 +78,11 @@ public class BrightnessImgCharMatcher {
                         }
                     }
                 }
-
-                brightnessLevel_cache.put(character, ((double) counter / (double) (cs.length * cs[0].length)));
+                brightnessLevelOfLettersCache.put(character,((double) counter / (double) (cs.length * cs[0].length)));
+                brightnessLevelOfCurrentCharSet.put(character, brightnessLevelOfLettersCache.get(character));
             }
-
         }
+
 
     }
 
@@ -96,23 +96,23 @@ public class BrightnessImgCharMatcher {
      * @return array at size of charset with values at 0-1 for every character in the same order
      */
     private double[] quantization(Character[] charSet) {
-        double max = brightnessLevel_cache.values().stream().iterator().next();
+        double max = brightnessLevelOfCurrentCharSet.values().stream().iterator().next();
         double min = max;
-        double[] new_brightness = new double[brightnessLevel_cache.size()];
+        double[] new_brightness = new double[brightnessLevelOfCurrentCharSet.size()];
 
-        for (Character ktr : brightnessLevel_cache.keySet()) {
-            if (brightnessLevel_cache.get(ktr) > max) {
-                max = brightnessLevel_cache.get(ktr);
+        for (Character ktr : brightnessLevelOfCurrentCharSet.keySet()) {
+            if (brightnessLevelOfCurrentCharSet.get(ktr) > max) {
+                max = brightnessLevelOfCurrentCharSet.get(ktr);
             }
-            if (brightnessLevel_cache.get(ktr) < min) {
-                min = brightnessLevel_cache.get(ktr);
+            if (brightnessLevelOfCurrentCharSet.get(ktr) < min) {
+                min = brightnessLevelOfCurrentCharSet.get(ktr);
             }
 
         }
         assert min != max;
         double maxMinusMin = max - min;
-        for (int ktr = 0; ktr < brightnessLevel_cache.size(); ktr++) {
-            new_brightness[ktr] = (brightnessLevel_cache.get(charSet[ktr]) - min) / maxMinusMin;
+        for (int ktr = 0; ktr < brightnessLevelOfCurrentCharSet.size(); ktr++) {
+            new_brightness[ktr] = (brightnessLevelOfCurrentCharSet.get(charSet[ktr]) - min) / maxMinusMin;
         }
         return new_brightness;
     }
@@ -144,26 +144,24 @@ public class BrightnessImgCharMatcher {
     private static double rgbToGray(Color color) {
         return color.getRed() * 0.2126 + color.getGreen() * 0.7152 +
                 color.getBlue() * 0.0722;
-
     }
+
     /**
      * this function get array of chars, and int numCharsInRow and for every sub image replace the image in
      * the nearest char that have the closest brightness
+     *
      * @param numCharsInRow int for num chars that replace row at image
-     * @param charSet list of chars
+     * @param charSet       list of chars
      * @return return an image that every sub pixel replaced.
      */
     private char[][] convertImageToAscii(int numCharsInRow, Character[] charSet) {
-
         int pixels = image.getWidth() / numCharsInRow;
         int columns = image.getWidth() / pixels;
         char[][] asciiArt = new char[image.getHeight() / pixels][columns];
         double[] b = quantization(charSet);
-
-
         int counter = -1;
         for (Image subImage : image.squareSubImagesOfSize(pixels)) {
-          counter++;
+            counter++;
             double mean;
             if (!cache.containsKey(subImage)) {
                 mean = meanPixel(subImage);
@@ -179,7 +177,7 @@ public class BrightnessImgCharMatcher {
                     idx = i;
                 }
             }
-            asciiArt[counter/columns][counter% columns] = charSet[idx];
+            asciiArt[counter / columns][counter % columns] = charSet[idx];
         }
         return asciiArt;
 

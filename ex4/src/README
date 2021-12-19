@@ -1,3 +1,31 @@
 volberstan
 
 
+Few words about this assignment:
+It was unclear few of the details of implantation but I did the best to make good work. we built a good
+structure of class shell:
+1. Init at constructor with image In the run method we get all the commands
+2. for every command we have a function to deal with it.
+In addition, I added help command to print to console all about the option.
+Important use at Collection library:
+    1. for hold the set of characters.
+    2. for saving cache of sub image brightness and characters brightness in BrightnessImgCharMatcher as hash map
+        to find easy.
+    3. converting list to set and opposite.
+
+About cache:
+in run time of render we are using cache to save all characters that was calculated there brightness,
+and to save sub_images mean brightness.
+
+
+
+
+Algorithm part:
+To find this duplicate in array i'm using with floyd algorithm in O(n) time complexity. here you can find details:
+    https://en.wikipedia.org/wiki/Cycle_detection#Tortoise_and_hare.
+
+to find duplicated morse code presentation of words im used at convert to morse shape end save in hash set. since set
+ operation of find is o(1) and is saving just non-duplicate strings we return the set size. in addition, when s is
+  number of word and m is the longest word then when using O(s) space and O(s*m) time complexity.
+
+
